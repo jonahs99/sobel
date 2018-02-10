@@ -34,7 +34,6 @@ func main() {
 	fmt.Println("Input file loaded.")
 
 	src, _, errDecode := image.Decode(inFile)
-	_ = src
 
 	if errDecode != nil {
 		fmt.Printf("Error decoding the input file.\n")
