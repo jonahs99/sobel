@@ -1,60 +1,13 @@
-package main
+package sobel
 
 import (
-	"flag"
-	"fmt"
 	"image"
 	"image/color"
-	"image/png"
-	_ "image/jpeg"
 	"math"
-	"os"
 )
 
-func main() {
-
-	inPath := flag.String("in", "none", "path to input image")
-	outPath := flag.String("out", "out.png", "path to output image")
-	flag.Parse()
-
-	// Reading the file as per stackoverflow.com/questions/8697095
-
-	inFile, errInFile := os.Open(*inPath)
-	outFile, errOutFile := os.Create(*outPath)
-
-	if errInFile != nil {
-		fmt.Printf("Error opening the input file '%s'.\n", *inPath)
-		os.Exit(-1)
-	}
-
-	if errOutFile != nil {
-		fmt.Printf("Error creating the output file '%s'.\n", *outPath)
-		os.Exit(-1)
-	}
-
-	fmt.Println("Input file loaded.")
-
-	src, _, errDecode := image.Decode(inFile)
-
-	if errDecode != nil {
-		fmt.Printf("Error decoding the input file.\n")
-		os.Exit(-1)
-	}
-
-	fmt.Println("Input file decoded.")
-
-	out := applySobel(src)
-
-	fmt.Println("Sobel kernel applied.")
-
-	defer outFile.Close()
-	png.Encode(outFile, out)
-
-	fmt.Printf("Output saved to '%s'.\n", *outPath)
-
-}
-
-func applySobel(src image.Image) image.Image {
+// ApplySobel returns a gray-scale image of the normalized sobel magnitude
+func ApplySobel(src image.Image) image.Image {
 	kernelX := []float64{
 		1, 0, -1,
 		2, 0, -2,
